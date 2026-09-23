@@ -1,6 +1,43 @@
 services:
+
   redis:
     image: redis:7-alpine
     container_name: distributed-api-redis
     ports:
       - "6379:6379"
+
+  api1:
+    build: .
+    container_name: distributed-api-1
+    environment:
+      PORT: 3000
+      INSTANCE_ID: api-1
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3001:3000"
+    depends_on:
+      - redis
+
+  api2:
+    build: .
+    container_name: distributed-api-2
+    environment:
+      PORT: 3000
+      INSTANCE_ID: api-2
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3002:3000"
+    depends_on:
+      - redis
+
+  api3:
+    build: .
+    container_name: distributed-api-3
+    environment:
+      PORT: 3000
+      INSTANCE_ID: api-3
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3003:3000"
+    depends_on:
+      - redis
