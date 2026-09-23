@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectRedis } from "./redis.js";
+import productsRoutes from "./routes/products.routes.js"
 
 dotenv.config();
 
@@ -10,6 +11,8 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 const INSTANCE_ID = process.env.INSTANCE_ID || "unknown";
+
+app.use("/api/products", productsRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({
