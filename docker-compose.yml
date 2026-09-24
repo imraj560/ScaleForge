@@ -13,10 +13,12 @@ services:
       PORT: 3000
       INSTANCE_ID: api-1
       REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://appuser:apppassword@postgres:5432/distributed_api
     ports:
       - "3001:3000"
     depends_on:
       - redis
+      - postgres
 
   api2:
     build: .
@@ -25,10 +27,12 @@ services:
       PORT: 3000
       INSTANCE_ID: api-2
       REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://appuser:apppassword@postgres:5432/distributed_api
     ports:
       - "3002:3000"
     depends_on:
       - redis
+      - postgres
 
   api3:
     build: .
@@ -37,10 +41,12 @@ services:
       PORT: 3000
       INSTANCE_ID: api-3
       REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql://appuser:apppassword@postgres:5432/distributed_api
     ports:
       - "3003:3000"
     depends_on:
       - redis
+      - postgres
 
   nginx:
     image: nginx:alpine
@@ -53,3 +59,18 @@ services:
       - api1
       - api2
       - api3
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: distributed-api-postgres
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppassword
+      POSTGRES_DB: distributed_api
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+    postgres_data:    

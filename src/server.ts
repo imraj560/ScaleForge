@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { connectRedis } from "./redis.js";
 import productsRoutes from "./routes/products.routes.js"
 import { rateLimiter } from "./middleware/rateLimiter.js";
+import { connectDatabase } from "./db.js";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.get("/api/health", (req, res) => {
 
 async function startServer() {
   await connectRedis();
+  await connectDatabase();
 
   app.listen(PORT, () => {
     console.log(`API running on port ${PORT}`);
