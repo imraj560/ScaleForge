@@ -1,58 +1,47 @@
 import { Router } from "express";
 import redis from "../redis.js";
+import pool from "../db.js";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const cacheKey = "products";
+  try {
+    const cacheKey = "products";
 
-  // 1. Check Redis
-  const cachedProducts = await redis.get(cacheKey);
+    const cachedProducts = await redis.get(cacheKey);
 
-  if (cachedProducts) {
-    console.log("CACHE HIT");
+    if (cachedProducts) {
+      console.log("CACHE HIT");
+
+      return res.json({
+        source: "redis",
+        data: JSON.parse(cachedProducts),
+      });
+    }
+
+    console.log("CACHE MISS");
+
+    const result = await pool.query(
+      "SELECT id, name, price FROM products ORDER BY id"
+    );
+
+    await redis.setEx(
+      cacheKey,
+      60,
+      JSON.stringify(result.rows)
+    );
 
     return res.json({
-      source: "redis",
-      data: JSON.parse(cachedProducts),
+      source: "postgres",
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error("Failed to fetch products:", error);
+
+    return res.status(500).json({
+      error: "Internal server error",
     });
   }
-
-  console.log("CACHE MISS");
-
-  // 2. Simulate a database query
-  const products = [
-    {
-      id: 1,
-      name: "MacBook Pro",
-      price: 1999,
-    },
-    {
-      id: 2,
-      name: "Mechanical Keyboard",
-      price: 129,
-    },
-    {
-      id: 3,
-      name: "Wireless Mouse",
-      price: 59,
-    },
-  ];
-
-  // 3. Store the result in Redis
-  await redis.setEx(
-    cacheKey,
-    60,
-    JSON.stringify(products)
-  );
-
-  // 4. Return the data
-  return res.json({
-    source: "database",
-    data: products,
-  });
 });
 
 export default router;
-
-
