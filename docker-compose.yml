@@ -1,5 +1,11 @@
 services:
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: distributed-api-frontend
+
   redis:
     image: redis:7-alpine
     container_name: distributed-api-redis
