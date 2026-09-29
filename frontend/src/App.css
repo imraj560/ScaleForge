@@ -520,3 +520,182 @@
     align-items: flex-start;
   }
 }
+
+.load-test {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.load-test-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.load-test-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.load-test-header p {
+  margin: 0.5rem 0 0;
+  color: #6b7280;
+}
+
+.load-test-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #105ac9;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.load-test-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.load-test-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  color: #4b5563;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.load-test-controls select {
+  min-width: 120px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  font: inherit;
+}
+
+.load-test-button {
+  padding: 0.68rem 1.1rem;
+  border: 0;
+  border-radius: 8px;
+  background: #105ac9;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.load-test-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.load-test-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.load-progress {
+  height: 6px;
+  margin-top: 1.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e5e7eb;
+}
+
+.load-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: #105ac9;
+  transition: width 0.2s ease;
+}
+
+.load-test-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.load-stat {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.load-stat span {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.load-stat strong {
+  font-size: 1.35rem;
+}
+
+.load-test-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.load-test-details > div {
+  padding: 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.load-test-details h3 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.load-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.load-row:last-child {
+  border-bottom: 0;
+}
+
+.load-row span {
+  color: #6b7280;
+}
+
+.load-test-footer {
+  margin-top: 1rem;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.load-test-error {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+@media (max-width: 768px) {
+  .load-test-summary,
+  .load-test-details {
+    grid-template-columns: 1fr;
+  }
+
+  .load-test-header {
+    align-items: flex-start;
+  }
+}
