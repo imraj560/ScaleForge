@@ -2,7 +2,8 @@
 import { useApiHealth } from "./hooks/useApiHealth";
 import { useApiRequest } from "./hooks/useApiRequest";
 import MetricsDashboard from "./components/MetricsDashboard";
-import { useLoadTest } from "./hooks/useLoadTest";
+import LoadTestPanel from "./components/LoadTestPanel";
+
 
 import "./App.css";
 
@@ -26,14 +27,7 @@ const services = [
 
 function App() {
   const { health, loading, error } = useApiHealth();
-    const {
-    running,
-    progress,
-    result,
-    lerror,
-    runLoadTest,
-  } = useLoadTest();
-  
+
   const {
     response,
     loading: requestLoading,
@@ -74,6 +68,25 @@ function App() {
           <div className="refresh-badge">
             <span className="status-dot" />
             Auto-refresh · 5 seconds
+          </div>
+        </section>
+
+         <section className="section">
+          <div className="section-heading">
+            <h3>API Instances</h3>
+            <span className="badge neutral">
+              3 configured instances
+            </span>
+          </div>
+
+          <div className="instance-notice">
+            <strong>Instance discovery in progress</strong>
+            <p>
+              Requests are routed through Nginx. The API health
+              endpoint identifies the instance that responds to
+              each request. Individual instance health monitoring
+              will be added in a later step.
+            </p>
           </div>
         </section>
 
@@ -156,40 +169,6 @@ function App() {
             ))}
           </div>
         </section>
-
-        <section className="section">
-          <div className="section-heading">
-            <h3>API Instances</h3>
-            <span className="badge neutral">
-              3 configured instances
-            </span>
-          </div>
-
-          <div className="instance-notice">
-            <strong>Instance discovery in progress</strong>
-            <p>
-              Requests are routed through Nginx. The API health
-              endpoint identifies the instance that responds to
-              each request. Individual instance health monitoring
-              will be added in a later step.
-            </p>
-          </div>
-        </section>
-
-        <button
-            onClick={() => void runLoadTest(20, 5)}
-            disabled={running}
-          >
-            {running ? `Running ${progress}%` : "Run Test"}
-          </button>
-
-          {result && (
-            <pre>
-              {JSON.stringify(result, null, 2)}
-            </pre>
-          )}
-
-          {lerror && <p>{lerror}</p>}
 
         <section className="section playground-section">
         <div className="section-heading">
@@ -287,7 +266,7 @@ function App() {
           </div>
         </div>
       </section>
-
+      <LoadTestPanel />      
       <MetricsDashboard />
 
         <footer className="footer">
