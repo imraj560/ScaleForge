@@ -1,0 +1,1 @@
+{"version":3,"file":"useMetrics.d.ts","sourceRoot":"","sources":["useMetrics.ts"],"names":[],"mappings":"AAEA,MAAM,WAAW,UAAU;IACzB,aAAa,EAAE,MAAM,CAAC;IACtB,mBAAmB,EAAE,MAAM,CAAC;IAC5B,WAAW,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC;IACpC,kBAAkB,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC;CAC5C;AAED,wBAAgB,UAAU;;;;;EAgFzB"}
