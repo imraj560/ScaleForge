@@ -2,6 +2,7 @@
 import { useApiHealth } from "./hooks/useApiHealth";
 import { useApiRequest } from "./hooks/useApiRequest";
 import MetricsDashboard from "./components/MetricsDashboard";
+import { useLoadTest } from "./hooks/useLoadTest";
 
 import "./App.css";
 
@@ -25,12 +26,21 @@ const services = [
 
 function App() {
   const { health, loading, error } = useApiHealth();
+    const {
+    running,
+    progress,
+    result,
+    lerror,
+    runLoadTest,
+  } = useLoadTest();
+  
   const {
     response,
     loading: requestLoading,
     error: requestError,
     sendRequest,
   } = useApiRequest();
+
 
   const apiOnline = health?.status === "ok";
 
@@ -165,6 +175,21 @@ function App() {
             </p>
           </div>
         </section>
+
+        <button
+            onClick={() => void runLoadTest(20, 5)}
+            disabled={running}
+          >
+            {running ? `Running ${progress}%` : "Run Test"}
+          </button>
+
+          {result && (
+            <pre>
+              {JSON.stringify(result, null, 2)}
+            </pre>
+          )}
+
+          {lerror && <p>{lerror}</p>}
 
         <section className="section playground-section">
         <div className="section-heading">
