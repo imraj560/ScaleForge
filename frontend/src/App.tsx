@@ -1,6 +1,7 @@
 
 import { useApiHealth } from "./hooks/useApiHealth";
 import { useApiRequest } from "./hooks/useApiRequest";
+import MetricsDashboard from "./components/MetricsDashboard";
 
 import "./App.css";
 
@@ -261,6 +262,8 @@ function App() {
           </div>
         </div>
       </section>
+
+      <MetricsDashboard />
 
         <footer className="footer">
           Distributed API Lab · Built with React, Express, Redis,
