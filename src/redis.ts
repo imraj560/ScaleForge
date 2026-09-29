@@ -1,8 +1,11 @@
-import { createClient } from 'redis'
+import dotenv from "dotenv";
+import { createClient } from "redis";
+
+dotenv.config();
 
 const redis = createClient({
   url: process.env.REDIS_URL,
-})
+});
 
 redis.on("error", (error) => {
   console.error("Redis error:", error);
