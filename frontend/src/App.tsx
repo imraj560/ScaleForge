@@ -1,5 +1,7 @@
 
 import { useApiHealth } from "./hooks/useApiHealth";
+import { useApiRequest } from "./hooks/useApiRequest";
+
 import "./App.css";
 
 const services = [
@@ -22,6 +24,12 @@ const services = [
 
 function App() {
   const { health, loading, error } = useApiHealth();
+  const {
+    response,
+    loading: requestLoading,
+    error: requestError,
+    sendRequest,
+  } = useApiRequest();
 
   const apiOnline = health?.status === "ok";
 
@@ -156,6 +164,103 @@ function App() {
             </p>
           </div>
         </section>
+
+        <section className="section playground-section">
+        <div className="section-heading">
+          <div>
+            <h3>API Playground</h3>
+            <p className="section-description">
+              Send real requests through the Nginx load balancer.
+            </p>
+          </div>
+        </div>
+
+        <div className="playground">
+          <div className="request-panel">
+            <div className="request-row">
+              <span className="method-badge">GET</span>
+
+              <code>/api/products</code>
+
+              <button
+                className="send-button"
+                onClick={() => sendRequest("/api/products")}
+                disabled={requestLoading}
+              >
+                {requestLoading ? "Sending..." : "Send Request"}
+              </button>
+            </div>
+
+            <div className="request-row">
+              <span className="method-badge">GET</span>
+
+              <code>/api/health</code>
+
+              <button
+                className="send-button secondary"
+                onClick={() => sendRequest("/api/health")}
+                disabled={requestLoading}
+              >
+                Send Request
+              </button>
+            </div>
+
+            <div className="request-row">
+              <span className="method-badge">GET</span>
+
+              <code>/metrics</code>
+
+              <button
+                className="send-button secondary"
+                onClick={() => sendRequest("/metrics")}
+                disabled={requestLoading}
+              >
+                Send Request
+              </button>
+            </div>
+          </div>
+
+          <div className="response-panel">
+            <div className="response-header">
+              <strong>Response</strong>
+
+              {response && (
+                <div className="response-meta">
+                  <span className="response-status">
+                    {response.status}
+                  </span>
+
+                  <span>{response.duration} ms</span>
+                </div>
+              )}
+            </div>
+
+            {requestError && (
+              <div className="error-message">
+                {requestError}
+              </div>
+            )}
+
+            {!response && !requestError && !requestLoading && (
+              <div className="empty-response">
+                Send a request to inspect the API response.
+              </div>
+            )}
+
+            {requestLoading && (
+              <div className="empty-response">
+                Sending request...
+              </div>
+            )}
+
+            {response && (
+              <pre className="json-response">
+                {JSON.stringify(response.data, null, 2)}
+              </pre>
+            )}
+          </div>
+        </div>
+      </section>
 
         <footer className="footer">
           Distributed API Lab · Built with React, Express, Redis,
