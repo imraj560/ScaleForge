@@ -15,13 +15,19 @@ export function useApiHealth() {
   useEffect(() => {
     let isMounted = true;
 
-    async function checkHealth() {
-      try {
-        const url = `${API_URL}/api/health`;
+   async function checkHealth() {
+  try {
+    console.log("API_URL inside hook:", API_URL);
 
-        console.log("Health request:", url);
+    const url = `${API_URL}/api/health`;
 
-        const response = await fetch(url);
+    console.log("Requesting:", url);
+
+    const response = await fetch(url);
+
+    console.log("Response:", response.status);
+
+   
 
         const contentType =
           response.headers.get("content-type") || "";
