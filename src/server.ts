@@ -22,7 +22,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:3000",
-      "https://YOUR-NETLIFY-SITE.netlify.app",
+      "https://peaceful-fairy-a9f043.netlify.app/",
     ],
   })
 );
