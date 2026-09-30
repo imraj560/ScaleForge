@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { API_URL } from "../config/api";
 
@@ -16,13 +17,34 @@ export function useApiHealth() {
 
     async function checkHealth() {
       try {
-        const response = await fetch(`${API_URL}/api/health`);
+        const url = `${API_URL}/api/health`;
+
+        console.log("Health request:", url);
+
+        const response = await fetch(url);
+
+        const contentType =
+          response.headers.get("content-type") || "";
+
+        const responseText = await response.text();
+
+        console.log("Health status:", response.status);
+        console.log("Health content type:", contentType);
+        console.log("Health response:", responseText);
 
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
+          throw new Error(
+            `HTTP ${response.status}: ${responseText}`
+          );
         }
 
-        const data: ApiHealth = await response.json();
+        if (!contentType.includes("application/json")) {
+          throw new Error(
+            `Expected JSON but received ${contentType || "unknown content type"}`
+          );
+        }
+
+        const data: ApiHealth = JSON.parse(responseText);
 
         if (isMounted) {
           setHealth(data);
@@ -44,9 +66,11 @@ export function useApiHealth() {
       }
     }
 
-    checkHealth();
+    void checkHealth();
 
-    const interval = setInterval(checkHealth, 5000);
+    const interval = setInterval(() => {
+      void checkHealth();
+    }, 5000);
 
     return () => {
       isMounted = false;
@@ -56,3 +80,4 @@ export function useApiHealth() {
 
   return { health, loading, error };
 }
+
