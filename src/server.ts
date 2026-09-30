@@ -16,7 +16,16 @@ app.set("trust proxy", 1);
 
 app.use(express.json());
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:3000",
+      "https://YOUR-NETLIFY-SITE.netlify.app",
+    ],
+  })
+);
 
 app.use(metricsMiddleware);
 
