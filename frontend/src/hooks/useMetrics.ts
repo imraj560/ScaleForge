@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { API_URL } from "../config/api";
 
 export interface ApiMetrics {
   totalRequests: number;
@@ -14,62 +15,76 @@ export function useMetrics() {
 
   const fetchMetrics = useCallback(async () => {
     try {
-      const response = await fetch("/metrics");
+      const response = await fetch(`${API_URL}/metrics`);
 
       if (!response.ok) {
-        throw new Error(`Metrics request failed: ${response.status}`);
+        throw new Error(
+          `Metrics request failed: ${response.status}`
+        );
       }
 
       const text = await response.text();
       const lines = text.split("\n");
 
-let totalRequests = 0;
-let durationSum = 0;
-let durationCount = 0;
+      let totalRequests = 0;
+      let durationSum = 0;
+      let durationCount = 0;
 
-const statusCodes: Record<string, number> = {};
+      const statusCodes: Record<string, number> = {};
 
-for (const line of lines) {
-  if (line.startsWith("http_requests_total{")) {
-    const match = line.match(/status_code="([^"]+)"/);
-    const value = Number(line.split(" ").at(-1));
+      for (const line of lines) {
+        if (line.startsWith("http_requests_total{")) {
+          const match = line.match(/status_code="([^"]+)"/);
+          const value = Number(line.split(" ").at(-1));
 
-    if (!Number.isFinite(value)) continue;
+          if (!Number.isFinite(value)) continue;
 
-    totalRequests += value;
+          totalRequests += value;
 
-    if (match) {
-      const status = match[1];
-      statusCodes[status] = (statusCodes[status] ?? 0) + value;
-    }
-  }
+          if (match) {
+            const status = match[1];
+            statusCodes[status] =
+              (statusCodes[status] ?? 0) + value;
+          }
+        }
 
-  if (line.startsWith("http_request_duration_seconds_sum{")) {
-    durationSum += Number(line.split(" ").at(-1)) || 0;
-  }
+        if (
+          line.startsWith(
+            "http_request_duration_seconds_sum{"
+          )
+        ) {
+          durationSum +=
+            Number(line.split(" ").at(-1)) || 0;
+        }
 
-  if (line.startsWith("http_request_duration_seconds_count{")) {
-    durationCount += Number(line.split(" ").at(-1)) || 0;
-  }
-}
+        if (
+          line.startsWith(
+            "http_request_duration_seconds_count{"
+          )
+        ) {
+          durationCount +=
+            Number(line.split(" ").at(-1)) || 0;
+        }
+      }
 
-const averageResponseTime =
-  durationCount > 0 ? (durationSum / durationCount) * 1000 : 0;
+      const averageResponseTime =
+        durationCount > 0
+          ? (durationSum / durationCount) * 1000
+          : 0;
 
-     
-           
-
-            setMetrics({
+      setMetrics({
         totalRequests,
         averageResponseTime,
         statusCodes,
         requestsByInstance: {},
-        });
+      });
 
       setError(null);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Unable to load metrics"
+        err instanceof Error
+          ? err.message
+          : "Unable to load metrics"
       );
     } finally {
       setLoading(false);
@@ -86,5 +101,10 @@ const averageResponseTime =
     return () => clearInterval(interval);
   }, [fetchMetrics]);
 
-  return { metrics, loading, error, refresh: fetchMetrics };
+  return {
+    metrics,
+    loading,
+    error,
+    refresh: fetchMetrics,
+  };
 }

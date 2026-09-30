@@ -1,5 +1,5 @@
-
 import { useEffect, useState } from "react";
+import { API_URL } from "../config/api";
 
 interface ApiHealth {
   status: string;
@@ -16,7 +16,7 @@ export function useApiHealth() {
 
     async function checkHealth() {
       try {
-        const response = await fetch("/api/health");
+        const response = await fetch(`${API_URL}/api/health`);
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);

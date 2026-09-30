@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config/api";
 
 interface ApiResponse {
   data: unknown;
@@ -21,7 +22,11 @@ export function useApiRequest() {
     const start = performance.now();
 
     try {
-      const response = await fetch(url);
+      const requestUrl = url.startsWith("http")
+        ? url
+        : `${API_URL}${url}`;
+
+      const response = await fetch(requestUrl);
 
       const duration = Math.round(performance.now() - start);
 

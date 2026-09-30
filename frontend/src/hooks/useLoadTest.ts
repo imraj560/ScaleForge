@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config/api";
 
 interface LoadTestResult {
   totalRequests: number;
@@ -41,7 +42,7 @@ export function useLoadTest() {
       const requestStart = performance.now();
 
       try {
-        const response = await fetch("/api/health");
+        const response = await fetch(`${API_URL}/api/health`);
 
         const data = await response.json();
 
