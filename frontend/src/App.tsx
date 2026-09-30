@@ -51,7 +51,7 @@ function App() {
 
         <span className="environment">
           <span className="status-dot" />
-          Local Environment
+          Railway Cloud
         </span>
       </header>
 
@@ -115,7 +115,7 @@ function App() {
 
               <h4>API Gateway</h4>
               <p className="service-description">
-                Express API behind Nginx
+                Express API running on Railway
               </p>
 
               <div className="card-divider" />
@@ -175,7 +175,7 @@ function App() {
           <div>
             <h3>API Playground</h3>
             <p className="section-description">
-              Send real requests through the Nginx load balancer.
+              Send real requests to the deployed API
             </p>
           </div>
         </div>
