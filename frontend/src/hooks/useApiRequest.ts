@@ -30,20 +30,40 @@ export function useApiRequest() {
 
       const duration = Math.round(performance.now() - start);
 
-      const data = await response.json();
+      const contentType =
+        response.headers.get("content-type") || "";
+
+      const data = contentType.includes("application/json")
+        ? await response.json()
+        : await response.text();
 
       if (!response.ok) {
-        throw new Error(
-          data?.message || `Request failed with status ${response.status}`
-        );
+        const message =
+          typeof data === "object" &&
+          data !== null &&
+          "message" in data
+            ? String(data.message)
+            : `Request failed with status ${response.status}`;
+
+        throw new Error(message);
       }
 
       setResponse({
         data,
         status: response.status,
         duration,
-        instance: data?.instance,
-        source: data?.source,
+        instance:
+          typeof data === "object" &&
+          data !== null &&
+          "instance" in data
+            ? String(data.instance)
+            : undefined,
+        source:
+          typeof data === "object" &&
+          data !== null &&
+          "source" in data
+            ? String(data.source)
+            : undefined,
       });
     } catch (err) {
       setError(

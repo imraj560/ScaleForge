@@ -6,6 +6,7 @@ import { rateLimiter } from "./middleware/rateLimiter.js";
 import { connectDatabase } from "./db.js";
 import { metricsMiddleware } from "./middleware/metrics.middleware.js";
 import { register } from "./metrics.js";
+import cors from "cors";
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ const app = express();
 app.set("trust proxy", 1);
 
 app.use(express.json());
+
+app.use(cors());
 
 app.use(metricsMiddleware);
 
